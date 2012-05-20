@@ -53,10 +53,7 @@
       (set! im-retrieve-context (lambda (uc) uc))
       (set! im-set-encoding (lambda (uc enc) #f))
       (set! im-convertible? (lambda (uc im-encoding) #t))
-      (set! im-commit
-        (lambda (uc str)
-          (display str)
-          #f))
+      (set! im-commit (lambda (uc str) #f))
       (set! im-clear-preedit (lambda (uc) #f))
       (set! im-pushback-preedit (lambda (uc attr str) #f))
       (set! im-update-preedit (lambda (uc) #f))
@@ -92,6 +89,7 @@
         ((help)
           (values
             (lambda (tc)
+              (set! im-commit (lambda (uc str) (display str)))
               (set! tutcode-use-auto-help-window? #t))
             (lambda (tc str)
               (tutcode-context-set-auto-help! tc '())
