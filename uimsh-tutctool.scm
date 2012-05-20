@@ -1,27 +1,49 @@
-;;; * uimsh-tutctool: uim-tutcode$B$r;H$C$?%3%^%s%I%i%$%s%D!<%k!#(B
-;;; $BI8=`F~NO$N3F9T$4$H$K=hM}$r<B9T!#F~=PNO4A;z%3!<%I$O(BEUC-JP$B!#(B
-;;; $BBh(B1$B0z?t$G=hM}FbMF$r;XDj!#(B
-;;;   $B=hM}FbMF(B:
-;;;     help: uim-tutcode$B$G$NJ8;z$NBG$AJ}$N%X%k%W$rI=<(!#(B
-;;;     kanji2seq: $B4A;z$r(Buim-tutcode$B%-!<%7!<%1%s%9$KJQ49!#(B
-;;;     seq2kanji: uim-tutcode$B%-!<%7!<%1%s%9$r4A;z$KJQ49!#(B
+;;; * uimsh-tutctool: uim-tutcode¤ò»È¤Ã¤¿¥³¥Þ¥ó¥É¥é¥¤¥ó¥Ä¡¼¥ë¡£
+;;; É¸½àÆþÎÏ¤Î³Æ¹Ô¤´¤È¤Ë½èÍý¤ò¼Â¹Ô¡£Æþ½ÐÎÏ´Á»ú¥³¡¼¥É¤ÏEUC-JP¡£
+;;; Âè1°ú¿ô¤Ç½èÍýÆâÍÆ¤ò»ØÄê¡£
+;;;   ½èÍýÆâÍÆ:
+;;;     bushuconv: Éô¼ó¹çÀ®ÊÑ´¹
+;;;     bushucand: Éô¼ó¹çÀ®ÊÑ´¹¸õÊä¤òÉ½¼¨
+;;;     help: uim-tutcode¤Ç¤ÎÊ¸»ú¤ÎÂÇ¤ÁÊý¤Î¥Ø¥ë¥×¤òÉ½¼¨
+;;;     kanji2seq: ´Á»ú¤òuim-tutcode¥­¡¼¥·¡¼¥±¥ó¥¹¤ËÊÑ´¹
+;;;     seq2kanji: uim-tutcode¥­¡¼¥·¡¼¥±¥ó¥¹¤ò´Á»ú¤ËÊÑ´¹
 ;;;
-;;; * help$B$N<B9TNc(B:
-;;; $ echo '$BD7NB(B'|uim-sh $PWD/uimsh-tutctool.scm help
+;;; * bushuconv: Éô¼ó¹çÀ®ÊÑ´¹
+;;;   bushuconv¤Ï¡¢Éô¼ó¹çÀ®ÊÑ´¹¤ËÀ®¸ù¤·¤¿¾ì¹ç¡¢¤½¤Î¹Ô¤Î°Ê¹ß¤ÎÊ¸»ú¤ÏÌµ»ë¤·¤Þ¤¹¡£
+;;; $ echo 'ÌÚÅá' | uim-sh $PWD/uimsh-tutctool.scm bushuconv
+;;; ÎÂ
+;;; $ echo '¢¥¢¥ÌÚ¢¥¿Í¿Í¾òÉ×' | uim-sh $PWD/uimsh-tutctool.scm bushuconv
+;;; óÏ
+;;;
+;;; * bushucand: Éô¼ó¹çÀ®ÊÑ´¹¸õÊä¤òÉ½¼¨
+;;; $ echo 'ÌÚÅá' | uim-sh $PWD/uimsh-tutctool.scm bushucand
+;;; ÎÂÛ·ÛÃÛëÜ¸äíÛÊà®äÌ
+;;; $ echo '¸ýÌÚ¥¤' | uim-sh $PWD/uimsh-tutctool.scm bushucand
+;;; ÊÝË«ÔÈèÞêð
+;;;
+;;;   bushucand¤Ï¡¢uim-tutcode¤ÎÂÐÏÃÅª¤ÊÉô¼ó¹çÀ®ÊÑ´¹µ¡Ç½¤ò»È¤Ã¤Æ¸õÊä¤òºî¤Ã¤Æ
+;;;   ¤¤¤ë¤Î¤Ç¡¢°Ê²¼¤Î¥Õ¥¡¥¤¥ë¤Î¾ì½ê¤òuim-pref¤ÇÀßÄê¤·¤Æ¤ª¤¯É¬Í×¤¬¤¢¤ê¤Þ¤¹¡£
+;;;   - bushu.help¥Õ¥¡¥¤¥ë(Éô¼ó¹çÀ®ÊÑ´¹ÍÑ¥æ¡¼¥¶¼­½ñ¤ËÁêÅö)
+;;;     bushu.help¥Õ¥¡¥¤¥ë¤òÍ¥Àè¤·¤Æ¸¡º÷¤·¤Þ¤¹¡£
+;;;   - bushu.index2¤Èbushu.expand¥Õ¥¡¥¤¥ë
+;;;     (tc-2.3.1¤Î¥¤¥ó¥¹¥È¡¼¥ë»þ¤ËÀ¸À®¡¦¥¤¥ó¥¹¥È¡¼¥ë¤µ¤ì¤ë¥Õ¥¡¥¤¥ë)
+;;;
+;;; * help: uim-tutcode¤Ç¤ÎÊ¸»ú¤ÎÂÇ¤ÁÊý¤Î¥Ø¥ë¥×¤òÉ½¼¨
+;;; $ echo 'Ä·ÎÂ'|uim-sh $PWD/uimsh-tutctool.scm help
 ;;;   |  |  |  |  ||  |     |  |           |  ||
 ;;;  3| b|  |  |  || 2|     |  |           |  ||
-;;;   |  |  | d|  ||  |     |  |a($BNB"%LZEa(B)|  ||
-;;;   |  |  |  | e||  |1($BD7(B)| f|           |  ||
+;;;   |  |  | d|  ||  |     |  |a(ÎÂ¢¥ÌÚÅá)|  ||
+;;;   |  |  |  | e||  |1(Ä·)| f|           |  ||
 ;;;
-;;; * seq2kanji$B$N<B9TNc(B:
+;;; * seq2kanji: uim-tutcode¥­¡¼¥·¡¼¥±¥ó¥¹¤ò´Á»ú¤ËÊÑ´¹
 ;;; $ echo 'if.g'|uim-sh $PWD/uimsh-tutctool.scm seq2kanji
-;;; $BCf8E(B
+;;; Ãæ¸Å
 ;;;
-;;; * kanji2seq$B$N<B9TNc(B
-;;;   ($B%7!<%1%s%9$,$:$l$F0UL#ITL@$J4A;zJ8;zNs$K$J$C$?$b$N$r=$I|(B):
-;;; $ echo '$BEECO5k7nJ,F0ED?7F1(B ' | uim-sh $PWD/uimsh-tutctool.scm kanji2seq \
+;;; * kanji2seq: ´Á»ú¤òuim-tutcode¥­¡¼¥·¡¼¥±¥ó¥¹¤ËÊÑ´¹
+;;; ¥·¡¼¥±¥ó¥¹¤¬¤º¤ì¤Æ°ÕÌ£ÉÔÌÀ¤Ê´Á»úÊ¸»úÎó¤Ë¤Ê¤Ã¤¿¤â¤Î¤ò½¤Éü¤¹¤ëÎã:
+;;; $ echo 'ÅÅÃÏµë·îÊ¬Æ°ÅÄ¿·Æ± ' | uim-sh $PWD/uimsh-tutctool.scm kanji2seq \
 ;;; | cut -b 2- | uim-sh $PWD/uimsh-tutctool.scm seq2kanji
-;;; $B$&$+$b$7$l$^$;$s!#(B
+;;; ¤¦¤«¤â¤·¤ì¤Þ¤»¤ó¡£
 (require-extension (srfi 8))
 (require "tutcode.scm")
 (define (main args)
@@ -65,7 +87,7 @@
   (let ((tc (setup-tutcode-context))
         (cmd (list-ref args 1)))
     (receive
-      (cmd-setup cmd-exec) ; ($B:G=i$K(B1$B2s$N$_<B9T$9$k4X?t(B $B3F9T$4$H$K<B9T$9$k4X?t(B)
+      (cmd-setup cmd-exec) ; (ºÇ½é¤Ë1²ó¤Î¤ß¼Â¹Ô¤¹¤ë´Ø¿ô ³Æ¹Ô¤´¤È¤Ë¼Â¹Ô¤¹¤ë´Ø¿ô)
       (case (string->symbol cmd)
         ((help)
           (values
@@ -96,6 +118,26 @@
                 (format "~a~%"
                   (string-list-concat
                     (tutcode-sequence->kanji-list tc (string-to-list str))))))))
+        ((bushuconv)
+          (values
+            (lambda (tc) #f)
+            (lambda (tc str)
+              (let ((res (tutcode-bushu-convert-on-list
+                          (cons "¢¥" (reverse (string-to-list str))) '())))
+                (display
+                  (if (string? res)
+                    (format "~a~%" res)
+                    (format "failed bushu conversion for '~a': ~a~%"
+                      str (reverse res))))))))
+        ((bushucand)
+          (values
+            (lambda (tc) #f)
+            (lambda (tc str)
+              (display
+                (format "~a~%"
+                  (apply string-append
+                    (tutcode-bushu-compose-interactively
+                      (reverse (string-to-list str)))))))))
         (else
           (raise (list 'unknown-command cmd))))
       (cmd-setup tc)
