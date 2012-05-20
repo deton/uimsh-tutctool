@@ -7,12 +7,11 @@
 ;;; 梁朷枌梛楔粱枴牀簗
 ;;;
 ;;; uim-tutcodeの対話的な部首合成変換機能を使って候補を作っているので、
-;;; bushu.index2とbushu.expandファイル(tc-2.3.1のインストール時に
-;;; 生成・インストールされる)を用意して、各ファイルの場所をuim-prefで
-;;; 設定しておく必要があります。
-;;;
-;;; 部首合成変換用ユーザ辞書に相当するbushu.helpファイルが設定されていれば、
-;;; bushu.helpファイルを優先して検索します。
+;;; 以下のファイルの場所をuim-prefで設定しておく必要があります。
+;;; - bushu.helpファイル(部首合成変換用ユーザ辞書に相当)
+;;;   bushu.helpファイルを優先して検索します。
+;;; - bushu.index2とbushu.expandファイル
+;;;   (tc-2.3.1のインストール時に生成・インストールされるファイル)
 (require "tutcode.scm")
 (define (main args)
   (let loop ((line (read-line)))
