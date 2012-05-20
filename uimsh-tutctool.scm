@@ -105,17 +105,17 @@
               (set! tutcode-verbose-stroke-key? (lambda (key key-state) #f)))
             (lambda (tc str)
               (display
-                (format "~a~%"
-                  (string-list-concat
-                    (tutcode-kanji-list->sequence tc (string-to-list str))))))))
+                (string-list-concat
+                  (tutcode-kanji-list->sequence tc (string-to-list str))))
+              (newline))))
         ((seq2kanji)
           (values
             (lambda (tc) #f)
             (lambda (tc str)
               (display
-                (format "~a~%"
-                  (string-list-concat
-                    (tutcode-sequence->kanji-list tc (string-to-list str))))))))
+                (string-list-concat
+                  (tutcode-sequence->kanji-list tc (string-to-list str))))
+              (newline))))
         ((bushuconv)
           (values
             (lambda (tc) #f)
@@ -132,10 +132,10 @@
             (lambda (tc) #f)
             (lambda (tc str)
               (display
-                (format "~a~%"
-                  (apply string-append
-                    (tutcode-bushu-compose-interactively
-                      (reverse (string-to-list str)))))))))
+                (apply string-append
+                  (tutcode-bushu-compose-interactively
+                    (reverse (string-to-list str)))))
+              (newline))))
         (else
           (raise (list 'unknown-command cmd))))
       (cmd-setup tc)
