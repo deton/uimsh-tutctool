@@ -136,6 +136,12 @@
                   (tutcode-bushu-compose-interactively
                     (reverse (string-to-list str)))))
               (newline))))
+        ((kcodeucs)
+          (values
+            (lambda (tc) #f)
+            (lambda (tc str)
+              (display (ja-kanji-code-input-ucs (string-to-list str)))
+              (newline))))
         (else
           (raise (list 'unknown-command cmd))))
       (cmd-setup tc)

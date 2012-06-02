@@ -1,9 +1,9 @@
 #!/bin/sh
 case "$1" in
-bushucand|bushuconv|help|kanji2seq|seq2kanji)
+bushucand|bushuconv|help|kanji2seq|seq2kanji|kcodeucs)
 	;;
 *)
-	echo "Usage: $0 <bushucand|bushuconv|help|kanji2seq|seq2kanji>"
+	echo "Usage: $0 <bushucand|bushuconv|help|kanji2seq|seq2kanji|kcodeucs>"
 	exit 1
 	;;
 esac

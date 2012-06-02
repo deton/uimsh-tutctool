@@ -11,16 +11,17 @@ uimsh-tutctoolはuim-tutcodeを使ったコマンドラインツールです。
   * help: uim-tutcodeでの文字の打ち方のヘルプを表示
   * kanji2seq: 漢字をuim-tutcodeキーシーケンスに変換
   * seq2kanji: uim-tutcodeキーシーケンスを漢字に変換
+  * kcodeucs: Unicode番号(U+XXXX)に対応するEUC-JP文字を出力
 
 bushuconv: 部首合成変換
 -----------------------
-
-bushuconvは、部首合成変換に成功した場合、その行の以降の文字は無視します。
 
 $ echo '木刀' | uim-sh $PWD/uimsh-tutctool.scm bushuconv
 梁
 $ echo '▲▲木▲人人条夫' | uim-sh $PWD/uimsh-tutctool.scm bushuconv
 麩
+
+  bushuconvは、部首合成変換に成功した場合、その行の以降の文字は無視します。
 
 bushucand: 部首合成変換候補を表示
 ---------------------------------
@@ -60,3 +61,9 @@ kanji2seq: 漢字をuim-tutcodeキーシーケンスに変換
 $ echo '電地給月分動田新同 ' | uim-sh $PWD/uimsh-tutctool.scm kanji2seq \
 | cut -b 2- | uim-sh $PWD/uimsh-tutctool.scm seq2kanji
 うかもしれません。
+
+kcodeucs: Unicode番号(U+XXXX)に対応するEUC-JP文字を出力
+-------------------------------------------------------
+
+$ echo U+25b3 | uim-sh $PWD/uimsh-tutctool.scm kcodeucs
+△
