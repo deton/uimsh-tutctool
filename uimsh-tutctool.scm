@@ -7,6 +7,7 @@
 ;;;     help: uim-tutcodeでの文字の打ち方のヘルプを表示
 ;;;     kanji2seq: 漢字をuim-tutcodeキーシーケンスに変換
 ;;;     seq2kanji: uim-tutcodeキーシーケンスを漢字に変換
+;;;     kcodeucs: Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出力
 ;;;
 ;;; * bushuconv: 部首合成変換
 ;;;   bushuconvは、部首合成変換に成功した場合、その行の以降の文字は無視します。
@@ -44,6 +45,39 @@
 ;;; $ echo '電地給月分動田新同 ' | uim-sh $PWD/uimsh-tutctool.scm kanji2seq \
 ;;; | cut -b 2- | uim-sh $PWD/uimsh-tutctool.scm seq2kanji
 ;;; うかもしれません。
+;;;
+;;; * kcodeucs: Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出力
+;;; $ echo U+25b3 | uim-sh $PWD/uimsh-tutctool.scm kcodeucs
+;;; △
+;;;
+;;; Copyright (c) 2012 KIHARA Hideto https://github.com/deton/uimsh-tutctool
+;;;
+;;; All rights reserved.
+;;;
+;;; Redistribution and use in source and binary forms, with or without
+;;; modification, are permitted provided that the following conditions
+;;; are met:
+;;; 1. Redistributions of source code must retain the above copyright
+;;;    notice, this list of conditions and the following disclaimer.
+;;; 2. Redistributions in binary form must reproduce the above copyright
+;;;    notice, this list of conditions and the following disclaimer in the
+;;;    documentation and/or other materials provided with the distribution.
+;;; 3. Neither the name of authors nor the names of its contributors
+;;;    may be used to endorse or promote products derived from this software
+;;;    without specific prior written permission.
+;;;
+;;; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ``AS IS'' AND
+;;; ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+;;; IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+;;; ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE
+;;; FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+;;; DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+;;; OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+;;; HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+;;; LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+;;; OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+;;; SUCH DAMAGE.
+;;;;
 (require-extension (srfi 8))
 (require "tutcode.scm")
 (define (main args)
