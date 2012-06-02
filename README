@@ -11,7 +11,7 @@ uimsh-tutctoolはuim-tutcodeを使ったコマンドラインツールです。
   * help: uim-tutcodeでの文字の打ち方のヘルプを表示
   * kanji2seq: 漢字をuim-tutcodeキーシーケンスに変換
   * seq2kanji: uim-tutcodeキーシーケンスを漢字に変換
-  * kcodeucs: Unicode番号(U+XXXX)に対応するEUC-JP文字を出力
+  * kcodeucs: Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出力
 
 bushuconv: 部首合成変換
 -----------------------
@@ -62,8 +62,8 @@ $ echo '電地給月分動田新同 ' | uim-sh $PWD/uimsh-tutctool.scm kanji2seq
 | cut -b 2- | uim-sh $PWD/uimsh-tutctool.scm seq2kanji
 うかもしれません。
 
-kcodeucs: Unicode番号(U+XXXX)に対応するEUC-JP文字を出力
--------------------------------------------------------
+kcodeucs: Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出力
+-----------------------------------------------------------------
 
 $ echo U+25b3 | uim-sh $PWD/uimsh-tutctool.scm kcodeucs
 △
