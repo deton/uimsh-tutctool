@@ -54,6 +54,13 @@ seq2kanji: uim-tutcodeキーシーケンスを漢字に変換
     $ echo 'if.g'|uim-sh $PWD/uimsh-tutctool.scm seq2kanji
     中古
 
+交ぜ書き変換や部首合成変換も使用可能。
+交ぜ書き変換で「どとう」を変換(△どとう{変換キー(スペース)}{確定キー(^M)})
+して、部首合成変換で「捗」を変換(▲才歩)する例:
+
+    $ echo 'aljdljdjru ^Mfjxiala/.;f' | uim-sh $PWD/uimsh-tutctool.scm seq2kanji
+    怒濤の進捗
+
 kanji2seq: 漢字をuim-tutcodeキーシーケンスに変換
 ------------------------------------------------
 
