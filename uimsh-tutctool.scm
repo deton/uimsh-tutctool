@@ -1,3 +1,4 @@
+#! /usr/bin/env uim-sh
 ;;; * uimsh-tutctool: uim-tutcodeを使ったコマンドラインツール。
 ;;; 標準入力の各行ごとに処理を実行。入出力漢字コードはEUC-JP。
 ;;; 第1引数で処理内容を指定。
@@ -115,74 +116,68 @@
            (c (create-context uc lang name)))
       (setup-context c)
       c))
-  (let ((tc (setup-stub-context "ja" "tutcode"))
-        (cmd (list-ref args 1)))
-    (receive
-      (cmd-setup cmd-exec) ; (最初に1回のみ実行する関数 各行ごとに実行する関数)
-      (case (string->symbol cmd)
-        ((help)
-          (values
-            (lambda (tc)
-              (set! im-commit (lambda (uc str) (display str)))
-              (set! tutcode-use-auto-help-window? #t))
-            (lambda (tc str)
-              (tutcode-context-set-auto-help! tc '())
-              (tutcode-reset-candidate-window tc)
-              (tutcode-check-auto-help-window-begin tc
-                (string-to-list str) '() #t)
-              (if (pair? (tutcode-context-auto-help tc))
-                (tutcode-auto-help-dump 'tutcode-state-on tc)
-                (display (format "no help for '~a'~%" str))))))
-        ((kanji2seq)
-          (values
-            (lambda (tc)
-              (set! tutcode-verbose-stroke-key? (lambda (key key-state) #f)))
-            (lambda (tc str)
-              (display
-                (string-list-concat
-                  (tutcode-kanji-list->sequence tc (string-to-list str))))
-              (newline))))
-        ((seq2kanji)
-          (values
-            (lambda (tc) #f)
-            (lambda (tc str)
-              (display
-                (string-list-concat
-                  (tutcode-sequence->kanji-list tc (string-to-list str))))
-              (newline))))
-        ((bushuconv)
-          (values
-            (lambda (tc) #f)
-            (lambda (tc str)
-              (let ((res (tutcode-bushu-convert-on-list
-                          (cons "▲" (reverse (string-to-list str))) '())))
-                (display
-                  (if (string? res)
-                    (format "~a~%" res)
-                    (format "failed bushu conversion for '~a': ~a~%"
-                      str (reverse res))))))))
-        ((bushucand)
-          (values
-            (lambda (tc) #f)
-            (lambda (tc str)
-              (display
-                (apply string-append
-                  (tutcode-bushu-compose-interactively
-                    (reverse (string-to-list str)))))
-              (newline))))
-        ((kcodeucs)
-          (values
-            (lambda (tc) #f)
-            (lambda (tc str)
-              (display (ja-kanji-code-input-ucs (string-to-list str)))
-              (newline))))
-        (else
-          (raise (list 'unknown-command cmd))))
-      (cmd-setup tc)
-      (let loop ((line (read-line)))
-        (and
-          line
-          (not (eof-object? line))
-          (begin
-            (cmd-exec tc line)
-            (loop (read-line))))))))
+  (define cmd-alist
+    `(("tutchelp"
+        ,(lambda (tc)
+          (set! im-commit (lambda (uc str) (display str)))
+          (set! tutcode-use-auto-help-window? #t))
+        ,(lambda (tc str)
+          (tutcode-context-set-auto-help! tc '())
+          (tutcode-reset-candidate-window tc)
+          (tutcode-check-auto-help-window-begin tc
+            (string-to-list str) '() #t)
+          (if (pair? (tutcode-context-auto-help tc))
+            (tutcode-auto-help-dump 'tutcode-state-on tc)
+            (display (format "no help for '~a'~%" str)))))
+      ("kanji2seq"
+        ,(lambda (tc)
+          (set! tutcode-verbose-stroke-key? (lambda (key key-state) #f)))
+        ,(lambda (tc str)
+          (display
+            (string-list-concat
+              (tutcode-kanji-list->sequence tc (string-to-list str))))
+          (newline)))
+      ("seq2kanji"
+        ,(lambda (tc) #f)
+        ,(lambda (tc str)
+          (display
+            (string-list-concat
+              (tutcode-sequence->kanji-list tc (string-to-list str))))
+          (newline)))
+      ("bushuconv"
+        ,(lambda (tc) #f)
+        ,(lambda (tc str)
+          (let ((res (tutcode-bushu-convert-on-list
+                      (cons "▲" (reverse (string-to-list str))) '())))
+            (display
+              (if (string? res)
+                (format "~a~%" res)
+                (format "failed bushu conversion for '~a': ~a~%"
+                  str (reverse res)))))))
+      ("bushucand"
+        ,(lambda (tc) #f)
+        ,(lambda (tc str)
+          (display
+            (apply string-append
+              (tutcode-bushu-compose-interactively
+                (reverse (string-to-list str)))))
+          (newline)))
+      ("kcodeucs"
+        ,(lambda (tc) #f)
+        ,(lambda (tc str)
+          (display (ja-kanji-code-input-ucs (string-to-list str)))
+          (newline)))))
+  (and-let*
+    ((tc (setup-stub-context "ja" "tutcode"))
+     (cmdname (list-ref args 1))
+     (cmds (assoc cmdname cmd-alist))
+     (cmd-setup (list-ref cmds 1)) ; 最初に1回のみ実行する関数
+     (cmd-action (list-ref cmds 2))) ; 各行ごとに実行する関数
+    (cmd-setup tc)
+    (let loop ((line (read-line)))
+      (and
+        line
+        (not (eof-object? line))
+        (begin
+          (cmd-action tc line)
+          (loop (read-line)))))))
