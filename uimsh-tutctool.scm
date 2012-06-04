@@ -5,22 +5,22 @@
 ;;;   処理内容:
 ;;;     bushuconv: 部首合成変換
 ;;;     bushucand: 部首合成変換候補を表示
-;;;     help: uim-tutcodeでの文字の打ち方のヘルプを表示
+;;;     tutchelp: uim-tutcodeでの文字の打ち方のヘルプを表示
 ;;;     kanji2seq: 漢字をuim-tutcodeキーシーケンスに変換
 ;;;     seq2kanji: uim-tutcodeキーシーケンスを漢字に変換
 ;;;     kcodeucs: Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出力
 ;;;
 ;;; * bushuconv: 部首合成変換
 ;;;   bushuconvは、部首合成変換に成功した場合、その行の以降の文字は無視します。
-;;; $ echo '木刀' | uim-sh $PWD/uimsh-tutctool.scm bushuconv
+;;; $ echo '木刀' | $PWD/uimsh-tutctool.scm bushuconv
 ;;; 梁
-;;; $ echo '▲▲木▲人人条夫' | uim-sh $PWD/uimsh-tutctool.scm bushuconv
+;;; $ echo '▲▲木▲人人条夫' | $PWD/uimsh-tutctool.scm bushuconv
 ;;; 麩
 ;;;
 ;;; * bushucand: 部首合成変換候補を表示
-;;; $ echo '木刀' | uim-sh $PWD/uimsh-tutctool.scm bushucand
+;;; $ echo '木刀' | $PWD/uimsh-tutctool.scm bushucand
 ;;; 梁朷枌梛楔粱枴牀簗
-;;; $ echo '口木イ' | uim-sh $PWD/uimsh-tutctool.scm bushucand
+;;; $ echo '口木イ' | $PWD/uimsh-tutctool.scm bushucand
 ;;; 保褒堡葆褓
 ;;;
 ;;;   bushucandは、uim-tutcodeの対話的な部首合成変換機能を使って候補を作って
@@ -30,25 +30,25 @@
 ;;;   - bushu.index2とbushu.expandファイル
 ;;;     (tc-2.3.1のインストール時に生成・インストールされるファイル)
 ;;;
-;;; * help: uim-tutcodeでの文字の打ち方のヘルプを表示
-;;; $ echo '跳梁'|uim-sh $PWD/uimsh-tutctool.scm help
+;;; * tutchelp: uim-tutcodeでの文字の打ち方のヘルプを表示
+;;; $ echo '跳梁'|$PWD/uimsh-tutctool.scm tutchelp
 ;;;   |  |  |  |  ||  |     |  |           |  ||
 ;;;  3| b|  |  |  || 2|     |  |           |  ||
 ;;;   |  |  | d|  ||  |     |  |a(梁▲木刀)|  ||
 ;;;   |  |  |  | e||  |1(跳)| f|           |  ||
 ;;;
 ;;; * seq2kanji: uim-tutcodeキーシーケンスを漢字に変換
-;;; $ echo 'if.g'|uim-sh $PWD/uimsh-tutctool.scm seq2kanji
+;;; $ echo 'if.g'|$PWD/uimsh-tutctool.scm seq2kanji
 ;;; 中古
 ;;;
 ;;; * kanji2seq: 漢字をuim-tutcodeキーシーケンスに変換
 ;;; シーケンスがずれて意味不明な漢字文字列になったものを修復する例:
-;;; $ echo '電地給月分動田新同 ' | uim-sh $PWD/uimsh-tutctool.scm kanji2seq \
-;;; | cut -b 2- | uim-sh $PWD/uimsh-tutctool.scm seq2kanji
+;;; $ echo '電地給月分動田新同 ' | $PWD/uimsh-tutctool.scm kanji2seq \
+;;; | cut -b 2- | $PWD/uimsh-tutctool.scm seq2kanji
 ;;; うかもしれません。
 ;;;
 ;;; * kcodeucs: Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出力
-;;; $ echo U+25b3 | uim-sh $PWD/uimsh-tutctool.scm kcodeucs
+;;; $ echo U+25b3 | $PWD/uimsh-tutctool.scm kcodeucs
 ;;; △
 ;;;
 ;;; Copyright (c) 2012 KIHARA Hideto https://github.com/deton/uimsh-tutctool
@@ -167,17 +167,21 @@
         ,(lambda (tc str)
           (display (ja-kanji-code-input-ucs (string-to-list str)))
           (newline)))))
-  (and-let*
-    ((tc (setup-stub-context "ja" "tutcode"))
-     (cmdname (list-ref args 1))
-     (cmds (assoc cmdname cmd-alist))
-     (cmd-setup (list-ref cmds 1)) ; 最初に1回のみ実行する関数
-     (cmd-action (list-ref cmds 2))) ; 各行ごとに実行する関数
-    (cmd-setup tc)
-    (let loop ((line (read-line)))
-      (and
-        line
-        (not (eof-object? line))
-        (begin
-          (cmd-action tc line)
-          (loop (read-line)))))))
+  (let*
+    ((mybasename (last (string-split (list-ref args 0) "/")))
+     (cmds (or (assoc mybasename cmd-alist)
+               (and (< 1 (length args))
+                    (assoc (list-ref args 1) cmd-alist)))))
+    (if (not cmds)
+      (display (format "Usage: ~a ~a~%" mybasename (map car cmd-alist)))
+      (let ((cmd-setup (list-ref cmds 1)) ; 最初に1回のみ実行する関数
+            (cmd-action (list-ref cmds 2)) ; 各行ごとに実行する関数
+            (tc (setup-stub-context "ja" "tutcode")))
+        (cmd-setup tc)
+        (let loop ((line (read-line)))
+          (and
+            line
+            (not (eof-object? line))
+            (begin
+              (cmd-action tc line)
+              (loop (read-line)))))))))
