@@ -83,44 +83,43 @@
 (require "tutcode.scm")
 (define (main args)
   (define (setup-im-stub)
+    (set! im-retrieve-context (lambda (uc) uc))
+    (set! im-set-encoding (lambda (uc enc) #f))
+    (set! im-convertible? (lambda (uc im-encoding) #t))
+    (set! im-commit (lambda (uc str) #f))
+    (set! im-clear-preedit (lambda (uc) #f))
+    (set! im-pushback-preedit (lambda (uc attr str) #f))
+    (set! im-update-preedit (lambda (uc) #f))
+    (set! im-activate-candidate-selector (lambda (uc nr display-limit) #f))
+    (set! im-select-candidate (lambda (uc idx) #f))
+    (set! im-shift-page-candidate (lambda (uc dir) #f))
+    (set! im-deactivate-candidate-selector (lambda (uc) #f))
+    (set! im-delay-activate-candidate-selector (lambda (uc delay) #f))
+    (set! im-delay-activate-candidate-selector-supported? (lambda (uc) #f))
+    (set! im-acquire-text-internal
+      (lambda (uc text-id origin former-len latter-len) #f))
+    (set! im-delete-text-internal
+      (lambda (uc text-id origin former-len latter-len) #f))
+    (set! im-clear-mode-list (lambda (uc) #f))
+    (set! im-pushback-mode-list (lambda (uc str) #f))
+    (set! im-update-mode-list (lambda (uc) #f))
+    (set! im-update-mode (lambda (uc mode) #f))
+    (set! im-update-prop-list (lambda (uc prop) #f))
+    (set! im-raise-configuration-change (lambda (uc) #t))
+    (set! im-switch-app-global-im (lambda (uc name) #t))
+    (set! im-switch-system-global-im (lambda (uc name) #t)))
+  (define (setup-stub-context lang name)
     (let ((uc (context-new #f #f '() #f #f)))
       (context-set-uc! uc uc)
-      (set! im-retrieve-context (lambda (uc) uc))
-      (set! im-set-encoding (lambda (uc enc) #f))
-      (set! im-convertible? (lambda (uc im-encoding) #t))
-      (set! im-commit (lambda (uc str) #f))
-      (set! im-clear-preedit (lambda (uc) #f))
-      (set! im-pushback-preedit (lambda (uc attr str) #f))
-      (set! im-update-preedit (lambda (uc) #f))
-      (set! im-activate-candidate-selector (lambda (uc nr display-limit) #f))
-      (set! im-select-candidate (lambda (uc idx) #f))
-      (set! im-shift-page-candidate (lambda (uc dir) #f))
-      (set! im-deactivate-candidate-selector (lambda (uc) #f))
-      (set! im-delay-activate-candidate-selector (lambda (uc delay) #f))
-      (set! im-delay-activate-candidate-selector-supported? (lambda (uc) #f))
-      (set! im-acquire-text-internal
-        (lambda (uc text-id origin former-len latter-len) #f))
-      (set! im-delete-text-internal
-        (lambda (uc text-id origin former-len latter-len) #f))
-      (set! im-clear-mode-list (lambda (uc) #f))
-      (set! im-pushback-mode-list (lambda (uc str) #f))
-      (set! im-update-mode-list (lambda (uc) #f))
-      (set! im-update-mode (lambda (uc mode) #f))
-      (set! im-update-prop-list (lambda (uc prop) #f))
-      (set! im-raise-configuration-change (lambda (uc) #t))
-      (set! im-switch-app-global-im (lambda (uc name) #t))
-      (set! im-switch-system-global-im (lambda (uc name) #t))
-      uc))
-  (define (setup-stub-context lang name)
-    (let* ((uc (setup-im-stub))
-           (c (create-context uc lang name)))
-      (setup-context c)
-      c))
+      (let ((c (create-context uc lang name)))
+        (setup-context c)
+        c)))
   (define cmd-alist
     `(("tutchelp"
-        ,(lambda (tc)
+        ,(lambda ()
           (set! im-commit (lambda (uc str) (display str)))
-          (set! tutcode-use-auto-help-window? #t))
+          (set! tutcode-use-auto-help-window? #t)
+          (setup-stub-context "ja" "tutcode"))
         ,(lambda (tc str)
           (tutcode-context-set-auto-help! tc '())
           (tutcode-reset-candidate-window tc)
@@ -130,22 +129,24 @@
             (tutcode-auto-help-dump 'tutcode-state-on tc)
             (display (format "no help for '~a'~%" str)))))
       ("kanji2seq"
-        ,(lambda (tc)
-          (set! tutcode-verbose-stroke-key? (lambda (key key-state) #f)))
+        ,(lambda ()
+          (set! tutcode-verbose-stroke-key? (lambda (key key-state) #f))
+          (setup-stub-context "ja" "tutcode"))
         ,(lambda (tc str)
           (display
             (string-list-concat
               (tutcode-kanji-list->sequence tc (string-to-list str))))
           (newline)))
       ("seq2kanji"
-        ,(lambda (tc) #f)
+        ,(lambda ()
+          (setup-stub-context "ja" "tutcode"))
         ,(lambda (tc str)
           (display
             (string-list-concat
               (tutcode-sequence->kanji-list tc (string-to-list str))))
           (newline)))
       ("bushuconv"
-        ,(lambda (tc) #f)
+        ,(lambda () #f)
         ,(lambda (tc str)
           (let ((res (tutcode-bushu-convert-on-list
                       (cons "▲" (reverse (string-to-list str))) '())))
@@ -155,7 +156,7 @@
                 (format "failed bushu conversion for '~a': ~a~%"
                   str (reverse res)))))))
       ("bushucand"
-        ,(lambda (tc) #f)
+        ,(lambda () #f)
         ,(lambda (tc str)
           (display
             (apply string-append
@@ -163,10 +164,11 @@
                 (reverse (string-to-list str)))))
           (newline)))
       ("kcodeucs"
-        ,(lambda (tc) #f)
+        ,(lambda () #f)
         ,(lambda (tc str)
           (display (ja-kanji-code-input-ucs (string-to-list str)))
           (newline)))))
+  (setup-im-stub)
   (let*
     ((mybasename (last (string-split (list-ref args 0) "/")))
      (cmds (or (assoc mybasename cmd-alist)
@@ -174,10 +176,8 @@
                     (assoc (list-ref args 1) cmd-alist)))))
     (if (not cmds)
       (display (format "Usage: ~a ~a~%" mybasename (map car cmd-alist)))
-      (let ((cmd-setup (list-ref cmds 1)) ; 最初に1回のみ実行する関数
-            (cmd-action (list-ref cmds 2)) ; 各行ごとに実行する関数
-            (tc (setup-stub-context "ja" "tutcode")))
-        (cmd-setup tc)
+      (let ((tc ((list-ref cmds 1))) ; setup関数の戻り値がcontext
+            (cmd-action (list-ref cmds 2))) ; 各行ごとに実行する関数
         (let loop ((line (read-line)))
           (and
             line
