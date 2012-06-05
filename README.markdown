@@ -8,7 +8,7 @@ uimsh-tutctoolはuim-tutcodeを使ったコマンドラインツールです。
 
   * bushuconv: 部首合成変換
   * bushucand: 部首合成変換候補を表示
-  * help: uim-tutcodeでの文字の打ち方のヘルプを表示
+  * tutchelp: uim-tutcodeでの文字の打ち方のヘルプを表示
   * kanji2seq: 漢字をuim-tutcodeキーシーケンスに変換
   * seq2kanji: uim-tutcodeキーシーケンスを漢字に変換
   * kcodeucs: Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出力
@@ -39,10 +39,10 @@ bushucandは、uim-tutcodeの対話的な部首合成変換機能を使って候
 - [bushu.index2とbushu.expandファイル](http://www1.interq.or.jp/~deton/tutcode/#bushudic)
   (tc-2.3.1のインストール時に生成・インストールされるファイル)
 
-help: uim-tutcodeでの文字の打ち方のヘルプを表示
------------------------------------------------
+tutchelp: uim-tutcodeでの文字の打ち方のヘルプを表示
+---------------------------------------------------
 
-    $ echo '跳梁'|uim-sh $PWD/uimsh-tutctool.scm help
+    $ echo '跳梁'|uim-sh $PWD/uimsh-tutctool.scm tutchelp
       |  |  |  |  ||  |     |  |           |  ||
      3| b|  |  |  || 2|     |  |           |  ||
       |  |  | d|  ||  |     |  |a(梁▲木刀)|  ||
