@@ -171,17 +171,25 @@
   (setup-im-stub)
   (let*
     ((mybasename (last (string-split (list-ref args 0) "/")))
-     (cmds (or (assoc mybasename cmd-alist)
-               (and (< 1 (length args))
-                    (assoc (list-ref args 1) cmd-alist)))))
-    (if (not cmds)
+     (cmd0 (assoc mybasename cmd-alist))
+     (cmd (or cmd0
+              (and (< 1 (length args))
+                   (assoc (list-ref args 1) cmd-alist)))))
+    (if (not cmd)
       (display (format "Usage: ~a ~a~%" mybasename (map car cmd-alist)))
-      (let ((tc ((list-ref cmds 1))) ; setup関数の戻り値がcontext
-            (cmd-action (list-ref cmds 2))) ; 各行ごとに実行する関数
-        (let loop ((line (read-line)))
-          (and
-            line
-            (not (eof-object? line))
-            (begin
-              (cmd-action tc line)
-              (loop (read-line)))))))))
+      (let ((tc ((list-ref cmd 1))) ; setup関数の戻り値がcontext
+            (cmd-action (list-ref cmd 2)) ; 各行ごとに実行する関数
+            (rest (if cmd0 (cdr args) (cddr args))))
+        (if (pair? rest)
+          (let loop ((rest rest))
+            (if (pair? rest)
+              (begin
+                (cmd-action tc (car rest))
+                (loop (cdr rest)))))
+          (let loop ((line (read-line)))
+            (and
+              line
+              (not (eof-object? line))
+              (begin
+                (cmd-action tc line)
+                (loop (read-line))))))))))
