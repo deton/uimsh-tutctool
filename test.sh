@@ -7,6 +7,9 @@ testsame () {
 	fi
 }
 
+actual=`$PWD/uimsh-tutctool.scm`
+testsame "Usage: uimsh-tutctool.scm <tutchelp|kanji2seq|seq2kanji|bushuconv|bushucand|kcodeucs> [str]..." "$actual"
+
 actual=`echo 'ÌÚÅá' | $PWD/uimsh-tutctool.scm bushuconv`
 testsame "ÎÂ" "$actual"
 
