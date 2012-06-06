@@ -50,7 +50,7 @@
 ;;; * kcodeucs: Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出力
 ;;; $ echo U+25b3 | $PWD/uimsh-tutctool.scm kcodeucs
 ;;; △
-;;;
+;;;;
 ;;; Copyright (c) 2012 KIHARA Hideto https://github.com/deton/uimsh-tutctool
 ;;;
 ;;; All rights reserved.
@@ -168,6 +168,15 @@
         ,(lambda (tc str)
           (display (ja-kanji-code-input-ucs (string-to-list str)))
           (newline)))))
+  (define (usage mybasename)
+    (display
+      (format "Usage: ~a <~a> [str]...~%" mybasename
+        (apply string-append
+          (cdr
+            (append-map
+              (lambda (x)
+                (list "|" (car x)))
+              cmd-alist))))))
   (setup-im-stub)
   (let*
     ((mybasename (last (string-split (list-ref args 0) "/")))
@@ -176,7 +185,7 @@
               (and (< 1 (length args))
                    (assoc (list-ref args 1) cmd-alist)))))
     (if (not cmd)
-      (display (format "Usage: ~a ~a~%" mybasename (map car cmd-alist)))
+      (usage mybasename)
       (let ((tc ((list-ref cmd 1))) ; setup関数の戻り値がcontext
             (cmd-action (list-ref cmd 2)) ; 各行ごとに実行する関数
             (rest (if cmd0 (cdr args) (cddr args))))
