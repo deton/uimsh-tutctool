@@ -25,6 +25,8 @@ bushuconv: 部首合成変換
 * 入力: 部首合成シーケンス
 * 出力: 合成される漢字
 
+実行例:
+
     $ echo '木刀' | uim-sh $PWD/uimsh-tutctool.scm bushuconv
     梁
     $ echo '▲▲木▲人人条夫' | uim-sh $PWD/uimsh-tutctool.scm bushuconv
@@ -36,6 +38,8 @@ bushucand: 部首合成変換候補を表示
 ---------------------------------
 * 入力: 部首リスト
 * 出力: 合成される漢字の候補
+
+実行例:
 
     $ echo '木刀' | uim-sh $PWD/uimsh-tutctool.scm bushucand
     梁朷枌梛楔粱枴牀簗
@@ -55,6 +59,8 @@ tutchelp: uim-tutcodeでの文字の打ち方のヘルプを表示
 * 入力: 漢字リスト
 * 出力: uim-tutcodeでの打ち方ヘルプ
 
+実行例:
+
     $ echo '跳梁'|uim-sh $PWD/uimsh-tutctool.scm tutchelp
       |  |  |  |  ||  |     |  |           |  ||
      3| b|  |  |  || 2|     |  |           |  ||
@@ -65,6 +71,8 @@ seq2kanji: uim-tutcodeキーシーケンスを漢字に変換
 ------------------------------------------------
 * 入力: uim-tutcodeキーシーケンス
 * 出力: 漢字文字列
+
+実行例:
 
     $ echo 'if.g'|uim-sh $PWD/uimsh-tutctool.scm seq2kanji
     中古
@@ -91,6 +99,8 @@ kcodeucs: Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出�
 -----------------------------------------------------------------
 * 入力: Unicodeコードポイント(U+XXXX)
 * 出力: EUC-JP文字
+
+実行例:
 
     $ echo U+25b3 | uim-sh $PWD/uimsh-tutctool.scm kcodeucs
     △
