@@ -79,7 +79,7 @@
 ;;; OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 ;;; SUCH DAMAGE.
 ;;;;
-(require-extension (srfi 8))
+(require-extension (srfi 1))
 (require "tutcode.scm")
 (define (main args)
   (define (setup-im-stub)
@@ -115,7 +115,7 @@
         (setup-context c)
         c)))
   (define cmd-alist
-    `(("tutchelp"
+    `((("tutchelp" "h")
         ,(lambda ()
           (set! im-commit (lambda (uc str) (display str)))
           (set! tutcode-use-auto-help-window? #t)
@@ -128,7 +128,7 @@
           (if (pair? (tutcode-context-auto-help tc))
             (tutcode-auto-help-dump 'tutcode-state-on tc)
             (display (format "no help for '~a'~%" str)))))
-      ("kanji2seq"
+      (("kanji2seq" "k")
         ,(lambda ()
           (set! tutcode-verbose-stroke-key? (lambda (key key-state) #f))
           (setup-stub-context "ja" "tutcode"))
@@ -137,7 +137,7 @@
             (string-list-concat
               (tutcode-kanji-list->sequence tc (string-to-list str))))
           (newline)))
-      ("seq2kanji"
+      (("seq2kanji" "s")
         ,(lambda ()
           (setup-stub-context "ja" "tutcode"))
         ,(lambda (tc str)
@@ -145,7 +145,7 @@
             (string-list-concat
               (tutcode-sequence->kanji-list tc (string-to-list str))))
           (newline)))
-      ("bushuconv"
+      (("bushuconv" "b")
         ,(lambda () #f)
         ,(lambda (tc str)
           (let ((res (tutcode-bushu-convert-on-list
@@ -155,7 +155,7 @@
                 (format "~a~%" res)
                 (format "failed bushu conversion for '~a': ~a~%"
                   str (reverse res)))))))
-      ("bushucand"
+      (("bushucand" "c")
         ,(lambda () #f)
         ,(lambda (tc str)
           (display
@@ -163,7 +163,7 @@
               (tutcode-bushu-compose-interactively
                 (reverse (string-to-list str)))))
           (newline)))
-      ("kcodeucs"
+      (("kcodeucs" "u")
         ,(lambda () #f)
         ,(lambda (tc str)
           (display (ja-kanji-code-input-ucs (string-to-list str)))
@@ -175,15 +175,15 @@
           (cdr
             (append-map
               (lambda (x)
-                (list "|" (car x)))
+                (list "|" (caar x)))
               cmd-alist))))))
   (setup-im-stub)
   (let*
     ((mybasename (last (string-split (list-ref args 0) "/")))
-     (cmd0 (assoc mybasename cmd-alist))
+     (cmd0 (assoc mybasename cmd-alist member))
      (cmd (or cmd0
               (and (< 1 (length args))
-                   (assoc (list-ref args 1) cmd-alist)))))
+                   (assoc (list-ref args 1) cmd-alist member)))))
     (if (not cmd)
       (usage mybasename)
       (let ((tc ((list-ref cmd 1))) ; setup関数の戻り値がcontext

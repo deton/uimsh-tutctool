@@ -12,6 +12,8 @@ testsame "Usage: uimsh-tutctool.scm <tutchelp|kanji2seq|seq2kanji|bushuconv|bush
 
 actual=`echo 'ÌÚÅá' | $PWD/uimsh-tutctool.scm bushuconv`
 testsame "ÎÂ" "$actual"
+actual=`echo 'ÌÚÅá' | $PWD/uimsh-tutctool.scm b`
+testsame "ÎÂ" "$actual"
 
 if [ ! -e bushuconv ]; then
 	ln -s uimsh-tutctool.scm bushuconv
@@ -26,10 +28,14 @@ actual=`$PWD/uimsh-tutctool.scm bushuconv 'ÌÚÅá' '¢¥¢¥ÌÚ¢¥¿Í¿Í¾òÉ×'`
 expect='ÎÂ
 óÏ'
 testsame "$expect" "$actual"
+actual=`$PWD/uimsh-tutctool.scm b 'ÌÚÅá' '¢¥¢¥ÌÚ¢¥¿Í¿Í¾òÉ×'`
+testsame "$expect" "$actual"
 actual=`$PWD/bushuconv 'ÌÚÅá' '¢¥¢¥ÌÚ¢¥¿Í¿Í¾òÉ×'`
 testsame "$expect" "$actual"
 
 actual=`echo 'ÌÚÅá' | $PWD/uimsh-tutctool.scm bushucand`
+testsame "ÎÂÛ·ÛÃÛëÜ¸äíÛÊà®äÌ" "$actual"
+actual=`echo 'ÌÚÅá' | $PWD/uimsh-tutctool.scm c`
 testsame "ÎÂÛ·ÛÃÛëÜ¸äíÛÊà®äÌ" "$actual"
 
 actual=`echo '¸ýÌÚ¥¤' | $PWD/uimsh-tutctool.scm bushucand`
@@ -53,6 +59,8 @@ expect="  |  |  |  |  ||  |     |  |           |  ||
  3| b|  |  |  || 2|     |  |           |  ||
   |  |  | d|  ||  |     |  |a(ÎÂ¢¥ÌÚÅá)|  ||
   |  |  |  | e||  |1(Ä·)| f|           |  ||"
+testsame "$expect" "$actual"
+actual=`echo 'Ä·ÎÂ'|$PWD/uimsh-tutctool.scm h`
 testsame "$expect" "$actual"
 actual=`$PWD/uimsh-tutctool.scm tutchelp 'Ä·ÎÂ'`
 testsame "$expect" "$actual"
@@ -81,6 +89,8 @@ actual=`$PWD/uimsh-tutctool.scm seq2kanji 'if.g' 'aljdljdjru fjxiala/.;f'`
 expect='Ãæ¸Å
 ÅÜÞ¹¤Î¿ÊÄ½'
 testsame "$expect" "$actual"
+actual=`$PWD/uimsh-tutctool.scm s 'if.g' 'aljdljdjru fjxiala/.;f'`
+testsame "$expect" "$actual"
 actual=`$PWD/seq2kanji 'if.g' 'aljdljdjru fjxiala/.;f'`
 testsame "$expect" "$actual"
 
@@ -97,10 +107,14 @@ testsame "¤¦¤«¤â¤·¤ì¤Þ¤»¤ó¡£" "$actual"
 
 actual=`$PWD/uimsh-tutctool.scm kanji2seq 'ÅÅÃÏµë·îÊ¬Æ°ÅÄ¿·Æ± '`
 testsame "jruekwjsighwkshflf " "$actual"
+actual=`$PWD/uimsh-tutctool.scm k 'ÅÅÃÏµë·îÊ¬Æ°ÅÄ¿·Æ± '`
+testsame "jruekwjsighwkshflf " "$actual"
 actual=`$PWD/kanji2seq 'ÅÅÃÏµë·îÊ¬Æ°ÅÄ¿·Æ± '`
 testsame "jruekwjsighwkshflf " "$actual"
 
 actual=`echo U+25b3 | uim-sh $PWD/uimsh-tutctool.scm kcodeucs`
+testsame "¢¤" "$actual"
+actual=`echo U+25b3 | uim-sh $PWD/uimsh-tutctool.scm u`
 testsame "¢¤" "$actual"
 
 if [ ! -e kcodeucs ]; then
