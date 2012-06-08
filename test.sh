@@ -82,8 +82,8 @@ testsame "怒濤の進捗" "$actual"
 if [ ! -e seq2kanji ]; then
 	ln -s uimsh-tutctool.scm seq2kanji
 fi
-actual=`echo 'if.g'|$PWD/seq2kanji`
-testsame "中古" "$actual"
+actual=`echo 'jsnf'|$PWD/seq2kanji`
+testsame "月光" "$actual"
 
 actual=`$PWD/uimsh-tutctool.scm seq2kanji 'if.g' 'aljdljdjru fjxiala/.;f'`
 expect='中古

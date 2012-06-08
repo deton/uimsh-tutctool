@@ -1,16 +1,21 @@
 #! /usr/bin/env uim-sh
 ;;; * uimsh-tutctool: uim-tutcodeを使ったコマンドラインツール。
-;;; 標準入力の各行ごとに処理を実行。入出力漢字コードはEUC-JP。
-;;; 第1引数で処理内容を指定。
-;;;   処理内容:
-;;;     bushuconv: 部首合成変換
-;;;     bushucand: 部首合成変換候補を表示
-;;;     tutchelp: uim-tutcodeでの文字の打ち方のヘルプを表示
-;;;     kanji2seq: 漢字をuim-tutcodeキーシーケンスに変換
-;;;     seq2kanji: uim-tutcodeキーシーケンスを漢字に変換
-;;;     kcodeucs: Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出力
+;;; 第1引数のコマンド種別(以下の6種類。かっこ内は短縮コマンド名)で
+;;; 処理内容を指定。
+;;; (uimsh-tutctool.scmのファイル名をコマンド種別名(seq2kanji等)にしておけば
+;;; (例:`ln -s uimsh-tutctool.scm seq2kanji`)、第1引数は省略可能)
+;;;     bushuconv (b): 部首合成変換
+;;;     bushucand (c): 部首合成変換候補を表示
+;;;     tutchelp (h): uim-tutcodeでの文字の打ち方のヘルプを表示
+;;;     kanji2seq (k): 漢字をuim-tutcodeキーシーケンスに変換
+;;;     seq2kanji (s): uim-tutcodeキーシーケンスを漢字に変換
+;;;     kcodeucs (u): Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出力
+;;; コマンド種別より後に引数が有る場合は、各引数に対して、
+;;; コマンド種別によって指定された処理を実行。
+;;; 無い場合は、標準入力の各行ごとに処理を実行。
+;;; 入出力漢字コードはEUC-JP。
 ;;;
-;;; * bushuconv: 部首合成変換
+;;; * bushuconv: 部首合成変換 (入力:部首合成シーケンス、出力:合成される漢字)
 ;;;   bushuconvは、部首合成変換に成功した場合、その行の以降の文字は無視します。
 ;;; $ echo '木刀' | $PWD/uimsh-tutctool.scm bushuconv
 ;;; 梁
@@ -18,6 +23,7 @@
 ;;; 麩
 ;;;
 ;;; * bushucand: 部首合成変換候補を表示
+;;;   (入力:部首リスト、出力:合成される漢字の候補)
 ;;; $ echo '木刀' | $PWD/uimsh-tutctool.scm bushucand
 ;;; 梁朷枌梛楔粱枴牀簗
 ;;; $ echo '口木イ' | $PWD/uimsh-tutctool.scm bushucand
@@ -31,6 +37,7 @@
 ;;;     (tc-2.3.1のインストール時に生成・インストールされるファイル)
 ;;;
 ;;; * tutchelp: uim-tutcodeでの文字の打ち方のヘルプを表示
+;;;   (入力:漢字リスト、出力:uim-tutcodeでの打ち方ヘルプ)
 ;;; $ echo '跳梁'|$PWD/uimsh-tutctool.scm tutchelp
 ;;;   |  |  |  |  ||  |     |  |           |  ||
 ;;;  3| b|  |  |  || 2|     |  |           |  ||
@@ -38,16 +45,25 @@
 ;;;   |  |  |  | e||  |1(跳)| f|           |  ||
 ;;;
 ;;; * seq2kanji: uim-tutcodeキーシーケンスを漢字に変換
+;;;   (入力:uim-tutcodeキーシーケンス、出力:漢字文字列)
 ;;; $ echo 'if.g'|$PWD/uimsh-tutctool.scm seq2kanji
 ;;; 中古
 ;;;
+;;; 交ぜ書き変換や部首合成変換も使用可能。
+;;; 交ぜ書き変換で「どとう」を変換(△どとう{変換キー(スペース)}{確定キー(^M)})
+;;; して、部首合成変換で「捗」を変換(▲才歩)する例:
+;;; $ echo 'aljdljdjru ^Mfjxiala/.;f' | uim-sh $PWD/uimsh-tutctool.scm seq2kanji
+;;; 怒濤の進捗
+;;;
 ;;; * kanji2seq: 漢字をuim-tutcodeキーシーケンスに変換
+;;;   (入力:漢字文字列、出力:uim-tutcodeキーシーケンス)
 ;;; シーケンスがずれて意味不明な漢字文字列になったものを修復する例:
 ;;; $ echo '電地給月分動田新同 ' | $PWD/uimsh-tutctool.scm kanji2seq \
 ;;; | cut -b 2- | $PWD/uimsh-tutctool.scm seq2kanji
 ;;; うかもしれません。
 ;;;
 ;;; * kcodeucs: Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出力
+;;;   (入力:Unicodeコードポイント(U+XXXX)、出力:EUC-JP文字)
 ;;; $ echo U+25b3 | $PWD/uimsh-tutctool.scm kcodeucs
 ;;; △
 ;;;;

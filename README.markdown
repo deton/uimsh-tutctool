@@ -3,16 +3,17 @@ uimsh-tutctool
 
 uimsh-tutctoolはuim-tutcodeを使ったコマンドラインツールです。
 
-第1引数のコマンド種別(以下の6種類)で処理内容を指定してください。
+第1引数のコマンド種別(以下の6種類。かっこ内は短縮コマンド名)で
+処理内容を指定してください。
 (uimsh-tutctool.scmのファイル名をコマンド種別名(seq2kanji等)にしておけば
 (例:`ln -s uimsh-tutctool.scm seq2kanji`)、第1引数は省略可能)
 
-  * bushuconv: 部首合成変換
-  * bushucand: 部首合成変換候補を表示
-  * tutchelp: uim-tutcodeでの文字の打ち方のヘルプを表示
-  * kanji2seq: 漢字をuim-tutcodeキーシーケンスに変換
-  * seq2kanji: uim-tutcodeキーシーケンスを漢字に変換
-  * kcodeucs: Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出力
+  * bushuconv (b): 部首合成変換
+  * bushucand (c): 部首合成変換候補を表示
+  * tutchelp (h): uim-tutcodeでの文字の打ち方のヘルプを表示
+  * kanji2seq (k): 漢字をuim-tutcodeキーシーケンスに変換
+  * seq2kanji (s): uim-tutcodeキーシーケンスを漢字に変換
+  * kcodeucs (u): Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出力
 
 コマンド種別より後に引数が有る場合は、各引数に対して、
 コマンド種別によって指定された処理を実行します。
@@ -29,7 +30,7 @@ bushuconv: 部首合成変換
 
     $ echo '木刀' | uim-sh $PWD/uimsh-tutctool.scm bushuconv
     梁
-    $ echo '▲▲木▲人人条夫' | uim-sh $PWD/uimsh-tutctool.scm bushuconv
+    $ echo '▲▲木▲人人条夫' | $PWD/uimsh-tutctool.scm bushuconv
     麩
 
 bushuconvは、部首合成変換に成功した場合、その行の以降の文字は無視します。
@@ -74,8 +75,9 @@ seq2kanji: uim-tutcodeキーシーケンスを漢字に変換
 
 実行例:
 
-    $ echo 'if.g'|uim-sh $PWD/uimsh-tutctool.scm seq2kanji
-    中古
+    $ echo 'jsnf'|uim-sh $PWD/uimsh-tutctool.scm seq2kanji
+    月光
+    $ grep `seq2kanji jsnf` ~/data/audio/sacd
 
 交ぜ書き変換や部首合成変換も使用可能。
 交ぜ書き変換で「どとう」を変換(△どとう{変換キー(スペース)}{確定キー(^M)})
