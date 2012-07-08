@@ -135,7 +135,7 @@
         ,(lambda ()
           (set! im-commit (lambda (uc str) (display str)))
           (set! tutcode-use-auto-help-window? #t)
-          (setup-stub-context "ja" "tutcode"))
+          (setup-stub-context "ja" 'tutcode))
         ,(lambda (tc str)
           (tutcode-context-set-auto-help! tc '())
           (tutcode-reset-candidate-window tc)
@@ -147,7 +147,7 @@
       (("kanji2seq" "k")
         ,(lambda ()
           (set! tutcode-verbose-stroke-key? (lambda (key key-state) #f))
-          (setup-stub-context "ja" "tutcode"))
+          (setup-stub-context "ja" 'tutcode))
         ,(lambda (tc str)
           (display
             (string-list-concat
@@ -155,7 +155,7 @@
           (newline)))
       (("seq2kanji" "s")
         ,(lambda ()
-          (setup-stub-context "ja" "tutcode"))
+          (setup-stub-context "ja" 'tutcode))
         ,(lambda (tc str)
           (display
             (string-list-concat
