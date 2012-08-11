@@ -8,7 +8,7 @@ testsame () {
 }
 
 actual=`$PWD/uimsh-tutctool.scm`
-testsame "Usage: uimsh-tutctool.scm <tutchelp|kanji2seq|seq2kanji|bushuconv|bushucand|kcodeucs> [str]..." "$actual"
+testsame "Usage: uimsh-tutctool.scm <tutchelp|kanji2seq|seq2kanji|bushuconv|bushucand|kcodeucs|kuten> [str]..." "$actual"
 
 actual=`echo '腾裴' | $PWD/uimsh-tutctool.scm bushuconv`
 testsame "温" "$actual"
@@ -127,3 +127,19 @@ actual=`uim-sh $PWD/uimsh-tutctool.scm kcodeucs U+25b3`
 testsame "ⅳ" "$actual"
 actual=`uim-sh $PWD/kcodeucs U+25b3`
 testsame "ⅳ" "$actual"
+
+actual=`echo 1-48-13 | uim-sh $PWD/uimsh-tutctool.scm kuten`
+testsame "协" "$actual"
+actual=`echo 1-48-13 | uim-sh $PWD/uimsh-tutctool.scm t`
+testsame "协" "$actual"
+
+if [ ! -e kuten ]; then
+	ln -s uimsh-tutctool.scm kuten
+fi
+actual=`echo 1-48-13 | $PWD/kuten`
+testsame "协" "$actual"
+
+actual=`uim-sh $PWD/uimsh-tutctool.scm kuten 1-48-13`
+testsame "协" "$actual"
+actual=`uim-sh $PWD/kuten 1-48-13`
+testsame "协" "$actual"

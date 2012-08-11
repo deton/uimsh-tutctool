@@ -3,7 +3,7 @@ uimsh-tutctool
 
 uimsh-tutctoolはuim-tutcodeを使ったコマンドラインツールです。
 
-第1引数のコマンド種別(以下の6種類。かっこ内は短縮コマンド名)で
+第1引数のコマンド種別(以下の7種類。かっこ内は短縮コマンド名)で
 処理内容を指定してください。
 (uimsh-tutctool.scmのファイル名をコマンド種別名(seq2kanji等)にしておけば
 (例:`ln -s uimsh-tutctool.scm seq2kanji`)、第1引数は省略可能)
@@ -14,6 +14,7 @@ uimsh-tutctoolはuim-tutcodeを使ったコマンドラインツールです。
   * kanji2seq (k): 漢字をuim-tutcodeキーシーケンスに変換
   * seq2kanji (s): uim-tutcodeキーシーケンスを漢字に変換
   * kcodeucs (u): Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出力
+  * kuten (t): 区点番号に対応するEUC-JP文字を出力
 
 コマンド種別より後に引数が有る場合は、各引数に対して、
 コマンド種別によって指定された処理を実行します。
@@ -106,6 +107,16 @@ kcodeucs: Unicodeコードポイント(U+XXXX)に対応するEUC-JP文字を出�
 
     $ echo U+25b3 | uim-sh $PWD/uimsh-tutctool.scm kcodeucs
     △
+
+kuten: 区点番号に対応するEUC-JP文字を出力
+-----------------------------------------
+* 入力: -で区切った、面-区-点番号(面区点それぞれ10進数)。1面の場合、面-は省略可能。(例:1-48-13または48-13)
+* 出力: EUC-JP文字
+
+実行例:
+
+    $ echo 1-48-13 | $PWD/uimsh-tutctool.scm kuten
+    亅
 
 関連
 ====
