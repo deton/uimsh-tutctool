@@ -142,6 +142,7 @@
         ,(lambda ()
           (set! im-commit (lambda (uc str) (display str)))
           (set! tutcode-use-auto-help-window? #t)
+          (set! tutcode-auto-help-with-real-keys? #f)
           (setup-stub-context "ja" 'tutcode))
         ,(lambda (tc str)
           (tutcode-context-set-auto-help! tc '())
