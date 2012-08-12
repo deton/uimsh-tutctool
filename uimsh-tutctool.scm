@@ -69,9 +69,9 @@
 ;;; △
 ;;;
 ;;; * kuten: 区点番号に対応するEUC-JP文字を出力
-;;;   (入力:-で区切った、面-区-点番号(面区点それぞれ10進数)、出力:EUC-JP文字)
-;;; 1面の場合、面-は省略可能。(例:1-48-13または48-13)
-;;; $ echo 1-48-13 | $PWD/uimsh-tutctool.scm kuten
+;;;   (入力:-で区切った、面-区-点番号(面区点それぞれ10進数)、
+;;;    出力:EUC-JP(EUC-JISX0213)文字)
+;;; $ echo 48-13 | $PWD/uimsh-tutctool.scm kuten
 ;;; 亅
 ;;;;
 ;;; Copyright (c) 2012 KIHARA Hideto https://github.com/deton/uimsh-tutctool
