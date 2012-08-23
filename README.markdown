@@ -121,5 +121,11 @@ kuten: 区点番号に対応するEUC-JP文字を出力
 関連
 ====
 
+* uim-bushuconv https://github.com/deton/uim-bushuconv
+
+UTF-8対応部首合成変換。
+また、UnicodeコードポイントのU+XXXXX表記の置換をしてUTF-8文字列を出力する
+コマンドラインツールあり。
+
 * uim-fmt-ja https://github.com/deton/uim-fmt-ja
 * uim-wordcount https://github.com/deton/uim-wordcount
