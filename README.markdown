@@ -1,7 +1,9 @@
 uimsh-tutctool
 ==============
 
-uimsh-tutctoolはuim-tutcodeを使ったコマンドラインツールです。
+uimsh-tutctoolは、
+[uim-tutcode](http://code.google.com/p/uim-doc-ja/wiki/UimTutcode)
+を使ったコマンドラインツールです。
 
 第1引数のコマンド種別(以下の7種類。かっこ内は短縮コマンド名)で
 処理内容を指定してください。
@@ -121,11 +123,18 @@ kuten: 区点番号に対応するEUC-JP文字を出力
 関連
 ====
 
-* uim-bushuconv https://github.com/deton/uim-bushuconv
+* [uim-bushuconv](https://github.com/deton/uim-bushuconv)
 
-UTF-8対応部首合成変換。
-また、UnicodeコードポイントのU+XXXXX表記の置換をしてUTF-8文字列を出力する
-コマンドラインツールあり。
+    UTF-8対応の部首合成変換IM。
+    また、文字列内のUnicodeコードポイントのU+XXXXX表記の置換をして
+    UTF-8文字列を出力するコマンドラインツールあり。
 
-* uim-fmt-ja https://github.com/deton/uim-fmt-ja
-* uim-wordcount https://github.com/deton/uim-wordcount
+* [tcfilter](http://www1.interq.or.jp/~deton/tcfilter/)
+
+    標準入力に対するフィルターとして使うことで、
+    コマンドラインでTUT-Codeシーケンスから漢字への変換可能。
+
+* [tutstroke](http://www1.interq.or.jp/~deton/tcfilter/#tutstroke)
+
+    [tclib](http://www.tcp-ip.or.jp/~tagawa/archive/)のshow_stroke()関数を
+    使って、漢字の打ち方ヘルプを表示するコマンドラインツール。
