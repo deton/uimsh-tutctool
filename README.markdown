@@ -23,6 +23,11 @@ uimsh-tutctoolは、
 無い場合は、標準入力の各行ごとに処理を実行します。
 
 入出力漢字コードはEUC-JP。
+なお、入力漢字コードがEUC-JPでない場合(UTF-8等)、以下のエラーが出ます。
+nkf -eやlv -Oejやiconv -t euc-jp等でEUC-JPに変換した文字列を、
+uimsh-tutctoolに渡してください。
+
+    Error: scm_charcodec_read_char: invalid char sequence
 
 bushuconv: 部首合成変換
 -----------------------
