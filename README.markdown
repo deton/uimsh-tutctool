@@ -24,10 +24,14 @@ uimsh-tutctoolは、
 
 入出力漢字コードはEUC-JP。
 なお、入力漢字コードがEUC-JPでない場合(UTF-8等)、以下のエラーが出ます。
+
+    Error: scm_charcodec_read_char: invalid char sequence
+
+この場合は、以下の例のように、
 nkf -eやlv -Oejやiconv -t euc-jp等でEUC-JPに変換した文字列を、
 uimsh-tutctoolに渡してください。
 
-    Error: scm_charcodec_read_char: invalid char sequence
+    $ tail -1 readme.utf-8 | nkf -e | $PWD/uimsh-tutctool.scm kanji2seq
 
 bushuconv: 部首合成変換
 -----------------------
